@@ -2,6 +2,7 @@ package com.usian;
 
 import com.usian.pojo.TbContent;
 import com.usian.pojo.TbContentCategory;
+import com.usian.utils.AdNode;
 import com.usian.utils.PageResult;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,9 @@ import java.util.List;
  */
 @FeignClient("usian-content-service")
 public interface ContentServiceFeign {
+    @RequestMapping("/service/content/selectFrontendContentByAD")
+    List<AdNode> selectFrontendContentByAD();
+
     @RequestMapping("/service/contentCategory/selectContentCategoryByParentId")
     List<TbContentCategory> selectContentCategoryByParentId(@RequestParam("id") Long id);
     @RequestMapping("/service/contentCategory/insertContentCategory")

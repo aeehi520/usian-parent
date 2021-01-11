@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping("/service/contentCategory")
 public class ContentCategoryController {
     @Autowired
+
     private ContentCategoryService contentCategoryService;
 
     @RequestMapping("/selectContentCategoryByParentId")

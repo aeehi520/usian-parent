@@ -1,11 +1,15 @@
 package com.usian.controller;
 
+import com.usian.ContentServiceFeign;
 import com.usian.feign.ItemServiceFeign;
+import com.usian.utils.AdNode;
 import com.usian.utils.CatResult;
 import com.usian.utils.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @ClassName : ItemCategoryController
@@ -25,4 +29,5 @@ public class ItemCategoryController {
         }
         return Result.error("查无结果");
     }
+
 }

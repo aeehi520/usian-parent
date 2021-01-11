@@ -37,7 +37,7 @@ public class ItemCategoryServiceImpl implements ItemCategoryService{
     public CatResult selectItemCategoryAll() {
         CatResult catResult = new CatResult();
         catResult.setData(getCatList(0L));
-        return null;
+        return catResult;
     }
 
     private List<?> getCatList(Long parentId) {
