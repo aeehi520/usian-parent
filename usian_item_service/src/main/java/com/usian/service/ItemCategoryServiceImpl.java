@@ -3,9 +3,11 @@ package com.usian.service;
 import com.usian.mapper.TbItemCatMapper;
 import com.usian.pojo.TbItemCat;
 import com.usian.pojo.TbItemCatExample;
+import com.usian.redis.RedisClient;
 import com.usian.utils.CatNode;
 import com.usian.utils.CatResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,10 @@ import java.util.List;
 public class ItemCategoryServiceImpl implements ItemCategoryService{
     @Autowired
     private TbItemCatMapper tbItemCatMapper;
+    @Value("${portal_catresult_redis_key")
+    private String portal_catresult_redis_key;
+    @Autowired
+    private RedisClient redisClient;
 
     @Override
     public List<TbItemCat> selectItemCategoryByParentId(Long id) {
@@ -35,8 +41,14 @@ public class ItemCategoryServiceImpl implements ItemCategoryService{
 
     @Override
     public CatResult selectItemCategoryAll() {
+        CatResult catResultRedis = (CatResult) redisClient.get("PROTAL_CATRESULT_KEY");
+        if (catResultRedis!=null){
+            return catResultRedis;
+        }
         CatResult catResult = new CatResult();
         catResult.setData(getCatList(0L));
+        //添加到缓存
+        redisClient.set(portal_catresult_redis_key,catResult);
         return catResult;
     }
 

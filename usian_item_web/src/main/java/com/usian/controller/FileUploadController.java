@@ -1,6 +1,10 @@
 package com.usian.controller;
 
+import com.github.tobato.fastdfs.domain.StorePath;
+import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.usian.utils.Result;
+import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +23,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/file")
 public class FileUploadController {
+    @Autowired
+    private FastFileStorageClient storageClient;
     private static final List<String> CONTENT_TYPES = Arrays.asList("image/jpeg","image/gif");
     /**
      * 图片上传
@@ -39,9 +45,11 @@ public class FileUploadController {
                 return Result.error("文件内容不合法:"+originalFilename);
             }
             //保存到服务器
-            file.transferTo(new File("G:\\images\\"+originalFilename));
+//            file.transferTo(new File("G:\\images\\"+originalFilename));
+            String ext = StringUtils.substringAfterLast(originalFilename, ".");
+            StorePath storePath = storageClient.uploadFile(file.getInputStream(), file.getSize(), ext, null);
             //生成url 返回
-            return Result.ok("http://image.usian.com/"+originalFilename);
+            return Result.ok("http://image.usian.com/"+storePath.getFullPath());
         } catch (Exception e) {
             e.printStackTrace();
         }
