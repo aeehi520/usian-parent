@@ -40,7 +40,7 @@ public class ContentServiceImpl implements ContentService{
     @Override
     public List<AdNode> selectFrontendContentByAD() {
         //从缓存搜
-        List<AdNode> adNodes = (List<AdNode>) redisClient.hget("portal_ad_redis_key", AD_CATEGORY_ID.toString());
+        List<AdNode> adNodes = (List<AdNode>) redisClient.hget(PORTAL_AD_KEY, AD_CATEGORY_ID.toString());
         if (adNodes!=null&&adNodes.size()>0){
             return adNodes;
         }
@@ -62,7 +62,7 @@ public class ContentServiceImpl implements ContentService{
             adNodeList.add(adNode);
         }
         //从数据库查询完后保存到缓存中
-        redisClient.hset(PORTAL_AD_KEY,AD_CATEGORY_ID.toString(),adNodeList);
+        redisClient.hset("portal_ad_redis_key",AD_CATEGORY_ID.toString(),adNodeList);
         return adNodeList;
     }
 }

@@ -41,14 +41,14 @@ public class ItemCategoryServiceImpl implements ItemCategoryService{
 
     @Override
     public CatResult selectItemCategoryAll() {
-        CatResult catResultRedis = (CatResult) redisClient.get("protal_catresult_redis_key");
+        CatResult catResultRedis = (CatResult) redisClient.get(PORTAL_CATRESULT_KEY);
         if (catResultRedis!=null){
             return catResultRedis;
         }
         CatResult catResult = new CatResult();
         catResult.setData(getCatList(0L));
         //添加到缓存
-        redisClient.set(PORTAL_CATRESULT_KEY,catResult);
+        redisClient.set("portal_catresult_redis_key",catResult);
         return catResult;
     }
 
