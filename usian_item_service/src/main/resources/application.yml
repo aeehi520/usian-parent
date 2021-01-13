@@ -22,7 +22,7 @@ spring:
         max-idle: 10 #连接池中的最大空闲连接
         min-idle: 5 #连接池中的最小空闲连接
 #配置缓存首页商品分类的 key
-PROTAL_CATRESULT_KEY: PROTAL_CATRESULT_KEY
+PORTAL_CATRESULT_KEY: PORTAL_CATRESULT_KEY
 server:
   port: 8090
 eureka:

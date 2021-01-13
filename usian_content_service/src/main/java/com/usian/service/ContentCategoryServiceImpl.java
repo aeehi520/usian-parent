@@ -8,8 +8,10 @@ import com.usian.pojo.TbContent;
 import com.usian.pojo.TbContentCategory;
 import com.usian.pojo.TbContentCategoryExample;
 import com.usian.pojo.TbContentExample;
+import com.usian.redis.RedisClient;
 import com.usian.utils.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +30,10 @@ public class ContentCategoryServiceImpl implements ContentCategoryService{
     private TbContentCategoryMapper tbContentCategoryMapper;
     @Autowired
     private TbContentMapper tbContentMapper;
+    @Autowired
+    private RedisClient redisClient;
+    @Value("${AD_CATEGORY_ID}")
+    private Long AD_CATEGORY_ID;
     @Override
     public List<TbContentCategory> selectContentCategoryByParentId(Long id) {
         TbContentCategoryExample example = new TbContentCategoryExample();
@@ -101,11 +107,15 @@ public class ContentCategoryServiceImpl implements ContentCategoryService{
     public Integer insertTbContent(TbContent tbContent) {
         tbContent.setCreated(new Date());
         tbContent.setUpdated(new Date());
+        //缓存同步
+        redisClient.hdel("portal_ad_redis_key",AD_CATEGORY_ID.toString());
         return tbContentMapper.insertSelective(tbContent);
     }
 
     @Override
     public Integer deleteContentByIds(Long ids) {
+        //缓存同步
+        redisClient.hdel("portal_ad_redis_key",AD_CATEGORY_ID.toString());
         return tbContentMapper.deleteByPrimaryKey(ids);
     }
 }

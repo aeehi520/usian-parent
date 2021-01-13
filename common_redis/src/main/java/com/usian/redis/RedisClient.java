@@ -61,7 +61,7 @@ public class RedisClient {
         }
         return redisTemplate.opsForValue().decrement(key,-delta);
     }
-    public Object hget(String key,String item){
+    public Object hget(String key, String item){
         return redisTemplate.opsForHash().get(key, item);
     }
     public boolean hset(String key,String item,Object value) {

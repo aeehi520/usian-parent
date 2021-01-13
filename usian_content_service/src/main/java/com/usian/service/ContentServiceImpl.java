@@ -3,6 +3,7 @@ package com.usian.service;
 import com.usian.mapper.TbContentMapper;
 import com.usian.pojo.TbContent;
 import com.usian.pojo.TbContentExample;
+import com.usian.redis.RedisClient;
 import com.usian.utils.AdNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,8 +33,18 @@ public class ContentServiceImpl implements ContentService{
     private Integer AD_HEIGHTB;
     @Value("${AD_WIDTHB}")
     private Integer AD_WIDTHB;
+    @Value("${PORTAL_AD_KEY}")
+    private String PORTAL_AD_KEY;
+    @Autowired
+    private RedisClient redisClient;
     @Override
     public List<AdNode> selectFrontendContentByAD() {
+        //从缓存搜
+        List<AdNode> adNodes = (List<AdNode>) redisClient.hget("portal_ad_redis_key", AD_CATEGORY_ID.toString());
+        if (adNodes!=null&&adNodes.size()>0){
+            return adNodes;
+        }
+        //从数据库搜索
         TbContentExample tbContentExample = new TbContentExample();
         TbContentExample.Criteria criteria = tbContentExample.createCriteria();
         criteria.andCategoryIdEqualTo(AD_CATEGORY_ID);
@@ -50,6 +61,8 @@ public class ContentServiceImpl implements ContentService{
             adNode.setWidthB(AD_WIDTHB);
             adNodeList.add(adNode);
         }
+        //从数据库查询完后保存到缓存中
+        redisClient.hset(PORTAL_AD_KEY,AD_CATEGORY_ID.toString(),adNodeList);
         return adNodeList;
     }
 }

@@ -24,8 +24,8 @@ import java.util.List;
 public class ItemCategoryServiceImpl implements ItemCategoryService{
     @Autowired
     private TbItemCatMapper tbItemCatMapper;
-    @Value("${portal_catresult_redis_key")
-    private String portal_catresult_redis_key;
+    @Value("${PORTAL_CATRESULT_KEY}")
+    private String PORTAL_CATRESULT_KEY;
     @Autowired
     private RedisClient redisClient;
 
@@ -41,14 +41,14 @@ public class ItemCategoryServiceImpl implements ItemCategoryService{
 
     @Override
     public CatResult selectItemCategoryAll() {
-        CatResult catResultRedis = (CatResult) redisClient.get("PROTAL_CATRESULT_KEY");
+        CatResult catResultRedis = (CatResult) redisClient.get("protal_catresult_redis_key");
         if (catResultRedis!=null){
             return catResultRedis;
         }
         CatResult catResult = new CatResult();
         catResult.setData(getCatList(0L));
         //添加到缓存
-        redisClient.set(portal_catresult_redis_key,catResult);
+        redisClient.set(PORTAL_CATRESULT_KEY,catResult);
         return catResult;
     }
 
