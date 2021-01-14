@@ -31,7 +31,7 @@ public class ItemParamController {
     @RequestMapping("/selectItemParamAll")
     public Result selectItemParamAll(
             @RequestParam(defaultValue = "1")Integer page,
-            @RequestParam(defaultValue = "2")Integer rows
+            @RequestParam(defaultValue = "10")Integer rows
     ){
         PageResult pageResult = itemServiceFeign.selectItemParamAll(page,rows);
         if(pageResult.getResult().size()>0){
