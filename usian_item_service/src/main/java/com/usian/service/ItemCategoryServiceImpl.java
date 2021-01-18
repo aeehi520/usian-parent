@@ -48,7 +48,7 @@ public class ItemCategoryServiceImpl implements ItemCategoryService{
         CatResult catResult = new CatResult();
         catResult.setData(getCatList(0L));
         //添加到缓存
-        redisClient.set("portal_catresult_redis_key",catResult);
+        redisClient.set(PORTAL_CATRESULT_KEY,catResult);
         return catResult;
     }
 

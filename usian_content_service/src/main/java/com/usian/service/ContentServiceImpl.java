@@ -62,7 +62,7 @@ public class ContentServiceImpl implements ContentService{
             adNodeList.add(adNode);
         }
         //从数据库查询完后保存到缓存中
-        redisClient.hset("portal_ad_redis_key",AD_CATEGORY_ID.toString(),adNodeList);
+        redisClient.hset(PORTAL_AD_KEY,AD_CATEGORY_ID.toString(),adNodeList);
         return adNodeList;
     }
 }

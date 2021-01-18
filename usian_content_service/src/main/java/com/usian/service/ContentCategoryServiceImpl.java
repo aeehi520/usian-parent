@@ -32,6 +32,8 @@ public class ContentCategoryServiceImpl implements ContentCategoryService{
     private TbContentMapper tbContentMapper;
     @Autowired
     private RedisClient redisClient;
+    @Value("${PORTAL_AD_KEY}")
+    private String PORTAL_AD_KEY;
     @Value("${AD_CATEGORY_ID}")
     private Long AD_CATEGORY_ID;
     @Override
@@ -108,14 +110,14 @@ public class ContentCategoryServiceImpl implements ContentCategoryService{
         tbContent.setCreated(new Date());
         tbContent.setUpdated(new Date());
         //缓存同步
-        redisClient.hdel("portal_ad_redis_key",AD_CATEGORY_ID.toString());
+        redisClient.hdel(PORTAL_AD_KEY,AD_CATEGORY_ID.toString());
         return tbContentMapper.insertSelective(tbContent);
     }
 
     @Override
     public Integer deleteContentByIds(Long ids) {
         //缓存同步
-        redisClient.hdel("portal_ad_redis_key",AD_CATEGORY_ID.toString());
+        redisClient.hdel(PORTAL_AD_KEY,AD_CATEGORY_ID.toString());
         return tbContentMapper.deleteByPrimaryKey(ids);
     }
 }
