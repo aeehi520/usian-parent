@@ -1,7 +1,10 @@
 package com.usian.service;
 
 import com.usian.pojo.TbItem;
+import com.usian.pojo.TbItemDesc;
+import com.usian.pojo.TbItemParamItem;
 import com.usian.utils.PageResult;
+import com.usian.utils.Result;
 
 import java.util.Map;
 
@@ -22,4 +25,8 @@ public interface ItemService {
     Map<String, Object> preUpdateItem(Long itemId);
 
     Integer updateTbItem(TbItem tbItem, String desc, String itemParams);
+
+    TbItemDesc selectItemDescByItemId(Long itemId);
+
+    TbItemParamItem selectTbItemParamItemByItemId(Long itemId);
 }

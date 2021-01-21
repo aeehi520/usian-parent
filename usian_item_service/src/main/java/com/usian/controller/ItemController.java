@@ -1,6 +1,8 @@
 package com.usian.controller;
 
 import com.usian.pojo.TbItem;
+import com.usian.pojo.TbItemDesc;
+import com.usian.pojo.TbItemParamItem;
 import com.usian.service.ItemService;
 import com.usian.utils.PageResult;
 import com.usian.utils.Result;
@@ -44,5 +46,13 @@ public class ItemController {
     @RequestMapping("/preUpdateItem")
     public Map<String,Object> preUpdateItem(Long itemId){
         return itemService.preUpdateItem(itemId);
+    }
+    @RequestMapping("/selectItemDescByItemId")
+    public TbItemDesc selectItemDescByItemId(Long itemId){
+        return itemService.selectItemDescByItemId(itemId);
+    }
+    @RequestMapping("/selectTbItemParamItemByItemId")
+    public TbItemParamItem selectTbItemParamItemByItemId(Long itemId){
+        return itemService.selectTbItemParamItemByItemId(itemId);
     }
 }
