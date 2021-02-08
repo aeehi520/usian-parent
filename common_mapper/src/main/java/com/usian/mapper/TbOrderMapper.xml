@@ -242,7 +242,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </select>
-  <update id="updateByExampleSelective" parameterType="map" >
+  <!--查询超时订单-->
+    <select id="selectOvertimeOrder" resultType="com.usian.pojo.TbOrder">
+      select * from tb_order where create_time &lt;= DATE_SUB(NOW(), INTERVAL 2 DAY)
+      AND status = 1
+      AND payment_type = 1
+    </select>
+    <update id="updateByExampleSelective" parameterType="map" >
     update tb_order
     <set >
       <if test="record.orderId != null" >

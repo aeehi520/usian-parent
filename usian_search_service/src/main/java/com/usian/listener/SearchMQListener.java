@@ -61,7 +61,7 @@ public class SearchMQListener {
             key = {"item.update"}
     ))
     public void update(String msg, Channel channel, Message message) {
-        int result = searchItemService.insertDocument(msg);
+        int result = searchItemService.updateDocument(msg);
         if (result>0){
             try {
                 channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
