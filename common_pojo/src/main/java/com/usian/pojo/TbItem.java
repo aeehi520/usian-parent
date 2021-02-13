@@ -1,10 +1,14 @@
 package com.usian.pojo;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import java.util.Date;
-
+@ApiModel
 public class TbItem {
+    @ApiModelProperty(hidden = true)
     private Long id;
-
+    @ApiModelProperty(value = "title",required = true)
     private String title;
 
     private String sellPoint;

@@ -1,9 +1,7 @@
 package com.usian.service;
 
-import com.usian.mapper.TbItemMapper;
-import com.usian.mapper.TbOrderItemMapper;
-import com.usian.mapper.TbOrderMapper;
-import com.usian.mapper.TbOrderShippingMapper;
+import com.usian.mapper.*;
+import com.usian.mq.MQSender;
 import com.usian.pojo.*;
 import com.usian.redis.RedisClient;
 import com.usian.utils.JsonUtils;
@@ -15,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @ClassName : OrderServiceImpl
@@ -44,6 +43,10 @@ public class OrderServiceImpl implements OrderService{
     private AmqpTemplate amqpTemplate;
     @Autowired
     private TbItemMapper tbItemMapper;
+    @Autowired
+    private MQSender mqSender;
+    @Autowired
+    private LocalMessageMapper localMessageMapper;
     @Override
     public Long insertOrder(OrderInfo orderInfo) {
         String orderItem = orderInfo.getOrderItem();
@@ -76,7 +79,13 @@ public class OrderServiceImpl implements OrderService{
         tbOrderShipping.setUpdated(new Date());
         tbOrderShipping.setOrderId(orderId.toString());
         tbOrderShippingMapper.insertSelective(tbOrderShipping);
-        amqpTemplate.convertAndSend("order_exchange","order.add",orderId.toString());
+//        amqpTemplate.convertAndSend("order_exchange","order.add",orderId.toString());
+        LocalMessage localMessage = new LocalMessage();
+        localMessage.setTxNo(UUID.randomUUID().toString());
+        localMessage.setOrderNo(orderId.toString());
+        localMessage.setState(0);
+        localMessageMapper.insertSelective(localMessage);
+        mqSender.sendMsg(localMessage);
         return orderId;
     }
 
